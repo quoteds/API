@@ -31,7 +31,7 @@ print(quotes)
 connection = sqlite3.connect('data.db')
 cursor = connection.cursor()
 
-# cursor.execute("DROP TABLE nature")
+# cursor.execute("DROP TABLE spirit")
 create_table = "CREATE TABLE IF NOT EXISTS spirit (qoute text, author text, likes int)"
 cursor.execute(create_table)
 
