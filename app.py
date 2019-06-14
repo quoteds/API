@@ -2,12 +2,26 @@ from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 import sqlite3
-from data import scraper_anime, scraper_love, scraper_life, scraper_nature, scraper_motivate, scraper_spiritual
+from data import like_table, scraper_anime, scraper_love, scraper_life, scraper_nature, scraper_motivate, scraper_spiritual
 
 
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
+
+# main GET
+class MainList(Resource):
+
+    def get(self):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = "SELECT * FROM main"
+        result = cursor.execute(query)
+        quotes = []
+        for row in result:
+            quotes.append({'name':row[0],'likes':row[1]})
+        connection.close()
+        return {'quotes': quotes}
 
 # Anime GET
 class AnimeList(Resource):
@@ -93,6 +107,7 @@ class SpiritList(Resource):
         connection.close()
         return {'quotes': quotes}
 
+api.add_resource(MainList, '/main')
 api.add_resource(AnimeList, '/anime')
 api.add_resource(LifeList, '/life')
 api.add_resource(LoveList, '/love')
