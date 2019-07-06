@@ -112,7 +112,7 @@ api.add_resource(AnimeList, '/anime')
 api.add_resource(LifeList, '/life')
 api.add_resource(LoveList, '/love')
 api.add_resource(NatureList, '/nature')
-api.add_resource(SpiritList, '/spirit')
+api.add_resource(SpiritList, '/spiritual')
 api.add_resource(MotivateList, '/motivate')
 
 app.run()

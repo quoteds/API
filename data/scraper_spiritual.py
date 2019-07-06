@@ -35,10 +35,16 @@ cursor = connection.cursor()
 create_table = "CREATE TABLE IF NOT EXISTS spirit (qoute text, author text, likes int)"
 cursor.execute(create_table)
 
-query = "INSERT INTO spirit VALUES (?, ?, ?)"
+query = "SELECT COUNT(*) FROM spirit"
+row = cursor.execute(query)
+stuff = row.fetchall()
 
-for quote in quotes:
+if stuff[0][0] != 0:
+    connection.commit()
+    connection.close()
+else:
+    query = "INSERT INTO spirit VALUES (?, ?, ?)"
+    for quote in quotes:
         cursor.execute(query,(quote,quotes[quote],0))
-
-connection.commit()
-connection.close()
+    connection.commit()
+    connection.close()

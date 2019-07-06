@@ -1,0 +1,5 @@
+Flask  
+FLask_RESTful
+flask-cors
+bs4
+requests
