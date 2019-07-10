@@ -14,7 +14,7 @@ cursor = connection.cursor()
 
 # cursor.execute("DROP TABLE anime")
 
-table = "CREATE TABLE IF NOT EXISTS main (name text, likes int)"
+table = "CREATE TABLE IF NOT EXISTS main (name text, likes int, users int)"
 cursor.execute(table)
 
 query = "SELECT COUNT(*) FROM main"
@@ -25,9 +25,9 @@ if stuff[0][0] != 0 :
     connection.commit()
     connection.close()
 else :
-    query = "INSERT INTO main VALUES (?, ?)"
+    query = "INSERT INTO main VALUES (?, ?, ?)"
     for name in options:
-        cursor.execute(query, (name, 0))
+        cursor.execute(query, (name, 0, 0))
     connection.commit()
     connection.close()
 
