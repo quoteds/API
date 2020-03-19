@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 import sqlite3
-from data import like_table, scraper_anime, scraper_love, scraper_life, scraper_nature, scraper_motivate, scraper_spiritual
+# from data import like_table, scraper_anime, scraper_love, scraper_life, scraper_nature, scraper_motivate, scraper_spiritual
 
 
 app = Flask(__name__)
@@ -36,6 +36,40 @@ class AnimeList(Resource):
             quotes.append({'quote':row[0],'author':row[1],'likes':row[2]})
         connection.close()
         return {'quotes': quotes}
+    
+class Like(Resource):
+
+    def put(self):
+        connection = sqlite3.connect('data.db')
+        cursor = connection.cursor()
+        query = "UPDATE {} SET likes = ? WHERE quote = ?"
+        parser = reqparse.RequestParser()
+        parser.add_argument('cat',
+            type = str,
+            required = True,
+            help = "Can't be blank!"
+        )
+        parser.add_argument('quote',
+            type = str,
+            required = True,
+            help = "Can't be blank!"
+        )
+        parser.add_argument('like',
+            type = int,
+            required = True,
+            help = "Can't be blank!"
+        )
+        data =  parser.parse_args()
+        likes = {
+            'cat': data['cat'],
+            'quote': data['quote'],
+            'like': data['like']
+        }
+        cursor.execute(query.format(data['cat']),(data['like'],data['quote']))
+        connection.commit()
+        # print(result)
+        connection.close()
+        # return likes
 
 # Life GET
 class LifeList(Resource):
@@ -107,6 +141,7 @@ class SpiritList(Resource):
         connection.close()
         return {'quotes': quotes}
 
+# GET requests
 api.add_resource(MainList, '/main')
 api.add_resource(AnimeList, '/anime')
 api.add_resource(LifeList, '/life')
@@ -114,5 +149,8 @@ api.add_resource(LoveList, '/love')
 api.add_resource(NatureList, '/nature')
 api.add_resource(SpiritList, '/spiritual')
 api.add_resource(MotivateList, '/motivate')
+
+# PUT requests 
+api.add_resource(Like, '/like')
 
 app.run()
