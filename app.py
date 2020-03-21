@@ -42,7 +42,8 @@ class Like(Resource):
     def put(self):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        query = "UPDATE {} SET likes = ? WHERE quote = ?"
+        query = "UPDATE {} SET likes = ? WHERE qoute = ?"
+        query2 = "UPDATE {} SET likes = ? WHERE quote = ?"
         parser = reqparse.RequestParser()
         parser.add_argument('cat',
             type = str,
@@ -65,7 +66,10 @@ class Like(Resource):
             'quote': data['quote'],
             'like': data['like']
         }
-        cursor.execute(query.format(data['cat']),(data['like'],data['quote']))
+        if data['cat'] == "anime":
+            cursor.execute(query2.format(data['cat']),(data['like'],data['quote']))
+        else:
+            cursor.execute(query.format(data['cat']),(data['like'],data['quote']))
         connection.commit()
         # print(result)
         connection.close()
