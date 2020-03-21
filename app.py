@@ -156,5 +156,5 @@ api.add_resource(MotivateList, '/motivate')
 
 # PUT requests 
 api.add_resource(Like, '/like')
-
-app.run()
+if __name__ == "__main__":
+    app.run()
